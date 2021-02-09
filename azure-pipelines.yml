@@ -47,4 +47,4 @@ steps:
       
       $headers = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
       Write-Host $headers[0]
-      Invoke-WebRequest -Uri https://app.vssps.visualstudio.com/_apis/profile/profiles/me -Headers $headers
+      Invoke-WebRequest -Uri https://dev.azure.com/twcsecurityassurance/Semmle/_apis/git/repositories?api-version=6.1-preview.1 -Headers $headers
