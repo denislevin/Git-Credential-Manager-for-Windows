@@ -11,16 +11,12 @@ pool:
 
 steps:
 - task: PowerShell@2
+  env: 
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   inputs:
     targetType: 'inline'
     script: |
-      Write-Host "Build.BuildUri:" $env:Build_BuildUri
-      Write-Host "System.CollectionUri:" $env:System_CollectionUri
-      Write-Host "System.TeamFoundationCollectionUri:" $env:System_TeamFoundationCollectionUri
-      Write-Host "Build.Repository.Uri:" $env:Build_Repository_Uri
-      #Validate as per https://tools.ietf.org/html/rfc7519
-      
-      $token = $env:SYSTEM_ACCESSTOKEN
+      $token = $env:SYSTEM_ACCESSTOKEN)
       #Access and ID tokens are fine, Refresh tokens will not work
       if (!$token.Contains(".") -or !$token.StartsWith("eyJ")) { Write-Error "Invalid token - not JWT" -ErrorAction Stop }
   
