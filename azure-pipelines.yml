@@ -46,4 +46,5 @@ steps:
       Write-Host $tokenArray
       
       $headers = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
+      Write-Host $headers[0]
       Invoke-WebRequest -Uri https://app.vssps.visualstudio.com/_apis/profile/profiles/me -Headers $headers
