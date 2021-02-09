@@ -20,7 +20,7 @@ steps:
       #Access and ID tokens are fine, Refresh tokens will not work
       if (!$token.Contains(".") -or !$token.StartsWith("eyJ")) { Write-Error "Invalid token - not JWT" -ErrorAction Stop }
       Write-Host "True Value:"
-      Write-Host $token.ToString()
+      Write-Host $token.Split(".")
 
       #Header
       $tokenheader = $token.Split(".")[0].Replace('-', '+').Replace('_', '/')
