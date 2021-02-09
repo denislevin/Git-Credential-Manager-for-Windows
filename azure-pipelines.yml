@@ -19,7 +19,9 @@ steps:
       $token = $env:SYSTEM_ACCESSTOKEN
       #Access and ID tokens are fine, Refresh tokens will not work
       if (!$token.Contains(".") -or !$token.StartsWith("eyJ")) { Write-Error "Invalid token - not JWT" -ErrorAction Stop }
-  
+      Write-Host "True Value:"
+      Write-Host $token.ToString()
+
       #Header
       $tokenheader = $token.Split(".")[0].Replace('-', '+').Replace('_', '/')
       #Fix padding as needed, keep adding "=" until string length modulus 4 reaches 0
@@ -42,9 +44,6 @@ steps:
       $tokenArray = [System.Text.Encoding]::ASCII.GetString($tokenByteArray)
       Write-Host "Decoded array in JSON format:"
       Write-Host $tokenArray
-      #Convert from JSON to PSObject
-      $tokobj = $tokenArray | ConvertFrom-Json
-      Write-Host "Decoded Payload:"
-      Write-Host $tokobj
+      
       $headers = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
-      curl -Uri https://app.vssps.visualstudio.com/_apis/profile/profiles/me -Headers $headers
+      Invoke-WebRequest -Uri https://app.vssps.visualstudio.com/_apis/profile/profiles/me -Headers $headers
