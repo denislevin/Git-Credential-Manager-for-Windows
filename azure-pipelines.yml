@@ -45,6 +45,6 @@ steps:
       $tokobj = $tokenArray | ConvertFrom-Json
       Write-Host "Decoded Payload:"
       Write-Host $tokobj
-      $headers = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN", Accept= "application/vnd.github.inertia-preview+json"}
+      $headers = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"; Accept= "application/vnd.github.inertia-preview+json"}
       Write-Host "Command: curl -H $headers https://api.github.com/repos/denislevin/Git-Credential-Manager-for-Windows/projects"
       curl -H $headers https://api.github.com/repos/denislevin/Git-Credential-Manager-for-Windows/projects
