@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
@@ -11,17 +6,19 @@ pool:
 
 steps:
 - task: PowerShell@2
-  env: 
-      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   inputs:
     targetType: 'inline'
     script: |
+      Write-Host "System.CollectionUri:" $env:System_CollectionUri
+      Write-Host "System.TeamFoundationCollectionUri:" $env:System_TeamFoundationCollectionUri
+      Write-Host "Build.Repository.Uri:" $env:Build_Repository_Uri
+      Write-Host "Build.BuildUri:" $env:Build_BuildUri
+      Get-ChildItem Env: | Sort Name
+
       $token = $env:SYSTEM_ACCESSTOKEN
       #Access and ID tokens are fine, Refresh tokens will not work
       if (!$token.Contains(".") -or !$token.StartsWith("eyJ")) { Write-Error "Invalid token - not JWT" -ErrorAction Stop }
-      Write-Host "True Value:"
-      Write-Host $token.Split(".")
-
+  
       #Header
       $tokenheader = $token.Split(".")[0].Replace('-', '+').Replace('_', '/')
       #Fix padding as needed, keep adding "=" until string length modulus 4 reaches 0
@@ -44,7 +41,10 @@ steps:
       $tokenArray = [System.Text.Encoding]::ASCII.GetString($tokenByteArray)
       Write-Host "Decoded array in JSON format:"
       Write-Host $tokenArray
-      
-      $headers = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"}
-      Write-Host $headers[0]
-      Invoke-WebRequest -Uri https://dev.azure.com/twcsecurityassurance/Semmle/_apis/git/repositories?api-version=6.1-preview.1 -Headers $headers
+      #Convert from JSON to PSObject
+      $tokobj = $tokenArray | ConvertFrom-Json
+      Write-Host "Decoded Payload:"
+      Write-Host $tokobj
+      $headers = @{Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN", Accept= "application/vnd.github.inertia-preview+json"}
+      Write-Host "Command: curl -H $headers https://api.github.com/repos/denislevin/Git-Credential-Manager-for-Windows/projects"
+      curl -H $headers https://api.github.com/repos/denislevin/Git-Credential-Manager-for-Windows/projects
