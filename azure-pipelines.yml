@@ -11,11 +11,11 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      Write-Host "System.CollectionUri:" $env:System_CollectionUri
+      Write-Host "System.CollectionUri:" $(System.CollectionUri)
       Write-Host "System.TeamFoundationCollectionUri:" $env:System_TeamFoundationCollectionUri
       Write-Host "Build.Repository.Uri:" $env:Build_Repository_Uri
       Write-Host "Build.BuildUri:" $env:Build_BuildUri
-      Get-ChildItem Env: | Sort Name
+      Get-ChildItem Env: 
 
       $token = $env:SYSTEM_ACCESSTOKEN
       #Access and ID tokens are fine, Refresh tokens will not work
