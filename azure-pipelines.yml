@@ -6,6 +6,8 @@ pool:
 
 steps:
 - task: PowerShell@2
+  env: 
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   inputs:
     targetType: 'inline'
     script: |
@@ -13,7 +15,7 @@ steps:
       Write-Host "System.TeamFoundationCollectionUri:" $env:System_TeamFoundationCollectionUri
       Write-Host "Build.Repository.Uri:" $env:Build_Repository_Uri
       Write-Host "Build.BuildUri:" $env:Build_BuildUri
-      Get-ChildItem Env: 
+      Get-ChildItem Env: | Sort Name
 
       $token = $env:SYSTEM_ACCESSTOKEN
       #Access and ID tokens are fine, Refresh tokens will not work
